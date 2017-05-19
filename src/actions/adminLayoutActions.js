@@ -1,10 +1,21 @@
 import { fetcher,fetchToState} from 'react-isomorphic-tools'
 
-export const testLayout = (layout)=>async (dispatch)=> {
-  await dispatch({
-    type: 'TEST_LAYOUT_UPDATE',
-    layout
-  })
+export const loadCategoriesList=() =>async (dispatch)=> {
+  try{
+     const response=await fetcher('/discounts-categories')
+       dispatch({
+        type: 'LOAD_CATEGORIES_LIST_SUCCESS',
+        payload:response
+      })
+   }
+  catch (e){
+      dispatch({
+          type: 'LOAD_CATEGORIES_LIST_ERROR',
+          payload: e
+      })
+
+  }
+
 }
 
 export const updateLayoutSettings = (newItems)=>async (dispatch)=> {

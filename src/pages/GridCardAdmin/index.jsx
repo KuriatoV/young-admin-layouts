@@ -7,7 +7,7 @@ import {openModal, closeModal,preload} from 'react-isomorphic-tools'
 @preload(
   ({fetchToState})=>{
   return Promise.all([
-    fetchToState('/discounts-categories', {key: 'discountsCategories'}),
+    // fetchToState('/discounts-categories', {key: 'discountsCategories'}),
     // fetchToState('/discounts/category/1/?&pagination-off=1', {key: 'discountsAdmin'}),
 
 ])},
