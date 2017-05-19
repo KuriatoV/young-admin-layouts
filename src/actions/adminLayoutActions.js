@@ -72,16 +72,15 @@ export const setNewSettings = (settings)=>async (dispatch)=> {
          }
      }
      export const changeActiveCategory = (id) => async (dispatch) => {
-      //  console.log('changeActiveCategory works',id);
+       console.log('changeActiveCategory works',id);
        const URL=`/discounts/category/${id}/?&pagination-off=1`;
-
-       await dispatch(fetchToState(URL, {key: 'discountsAdmin'}));
          try{
-           await dispatch(fetchToState(URL, {key: 'discountsAdmin'}));
-             dispatch({
-                 type: 'CHANGE_CATEGORY_SUCCESS',
-                 payload: id
-             })
+           const response = await fetcher(URL)
+           dispatch({
+             type: 'CHANGE_CATEGORY_SUCCESS',
+             payload: id,
+             categoryItems:response
+           })
           }
          catch (e){
              dispatch({

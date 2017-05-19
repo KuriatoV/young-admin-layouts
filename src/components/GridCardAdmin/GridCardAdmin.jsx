@@ -9,7 +9,8 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 @connect(state => ({
 categoriesList:state.getIn(['adminLayout','categoriesList']),
-categoryItems:state.getIn(['fetchData','discountsAdmin','response']),
+// categoryItems:state.getIn(['fetchData','discountsAdmin','response']),
+categoryItems:state.getIn(['adminLayout','categoryItems']),
 itemsSettings:state.getIn(['adminLayout','itemsSettings']),
 newItemsSettings:state.getIn(['adminLayout','newItemsSettings']),
 currentLayout:state.getIn(['adminLayout','currentLayout']),
@@ -93,31 +94,12 @@ generateLayout= ()=>{
     return layoutArr
   }
 
-
-
-  defaultGetWidth=()=>{
-   return window.innerWidth;
-}
-
-// calculateCurrentLayout= (data)=>{
-//   const {itemsSettings}=this.props
-//
-//   let layoutArr=[];
-//   itemsSettings.map((item,i)=>{
-//
-//     layoutArr.push({i:`${item.get('id')}`, x:item.get('x'), y:item.get('y'), w: item.get('w'), h:  item.get('h') })
-//
-//   })
-//   return layoutArr
-// }
 saveChangesToLayout=()=>(e)=>{
 this.props.actions.updateLayoutSettings();
 }
 
 onLayoutChange= (layoutName)=>(layout)=>{
-////
 console.log('here=========Ю',layoutName,layout);
-// console.log('h2222',this.props.itemsSettings.toJS());
 let itemsArr=[];
 let itemsJSON=[];
 let items=this.props.itemsSettings;
@@ -271,7 +253,7 @@ choseCategory= (category)=>()=>{
       currentCategory
     }=this.props
   //  const {currentCategory} =this.state
-console.log('categoriesList',categoriesList);
+    console.log('categoriesList',categoriesList);
     return(
       <div className='admin-grid-wrapper'>
         <div className='admin-grid'>

@@ -1,9 +1,10 @@
 import { fromJS,Map } from 'immutable';
 
 const initialState=fromJS({
-  categoriesList:[],
   currentLayout:{name:'lg',cols:6,breakpoint:1200},
   currentCategory:0,
+  categoriesList:[],
+  categoryItems:[],
   itemsSettings:[],
   newItemsSettings:[],
 
@@ -19,7 +20,7 @@ export default (state = initialState, action)=>{
         return state.set('newItemsSettings',action.settings)
         }
         case 'CHANGE_CATEGORY_SUCCESS':{
-        return state.set('currentCategory',action.payload)
+        return state.set('currentCategory',action.payload).set('categoryItems',fromJS(action.categoryItems))
         }
         case 'SET_CURRENT_LAYOUT':{
         return state.set('currentLayout',Map(action.payload))
