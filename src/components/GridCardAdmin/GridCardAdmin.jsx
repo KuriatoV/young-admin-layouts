@@ -30,40 +30,16 @@ export default class GridAdminComponent extends React.Component {
     this.props.actions.loadCategoriesList();
   }
 
-discountShow= (discount)=>()=>{
-  // this.props.actions.setActiveDiscount(discount);
-}
-componentWillMount=()=>{
-  console.log('componentWillMount');
- // this.props.actions.calculateCurrentLayout(this.props.categoryItems);
-}
-componentWillReceiveProps=(next)=>{
-// next.currentCategory!=this.props.currentCategory && this.props.actions.calculateCurrentLayout(next.categoryItems);
-  // this.props.actions.calculateCurrentLayout(this.props.categoryItems);
-
-  console.log('componentWillReceiveProps');
-// console.log('componentWillReceiveProps',this.props.currentLayout==next.currentLayout)
-// if (this.props.currentLayout==next.currentLayout){this.setState({ololo:!this.state.ololo})}
-}
-componentDidMount=()=>{
-  console.log('componentDidMount');
-  //  this.props.actions.calculateCurrentLayout(this.props.categoryItems);
-}
-// componentDidUpdate=()=>{
-//    this.props.categoryItems && this.props.actions.calculateCurrentLayout(this.props.categoryItems);
-// }
-
-
 generateLayoutsSettings= (items)=>()=>{
  let itemsArr=[];
  items.map(it=>{
   let layout_settings={
-    lg:this.layoutFromCols(6,items).find(f=>f.num==it.get('id')),
-    md:this.layoutFromCols(3,items).find(f=>f.num==it.get('id')),
-    sm:this.layoutFromCols(2,items).find(f=>f.num==it.get('id')),
-    xs:this.layoutFromCols(1,items).find(f=>f.num==it.get('id'))
+    lg:this.layoutFromCols(6,items).find(f=>f.num==it.id),
+    md:this.layoutFromCols(3,items).find(f=>f.num==it.id),
+    sm:this.layoutFromCols(2,items).find(f=>f.num==it.id),
+    xs:this.layoutFromCols(1,items).find(f=>f.num==it.id)
   }
-  itemsArr.push({id:it.get('id'),order_num:it.get('order_num'),layout_settings:JSON.stringify(layout_settings)})
+  itemsArr.push({id:it.id,order_num:it.order_num,layout_settings:JSON.stringify(layout_settings)})
 })
   this.props.actions.setNewSettings(itemsArr);
  }
@@ -75,49 +51,45 @@ layoutFromCols= (cols,items)=>{
   items.map((item, i)=>{
   if (i!=0){counterX+=Math.floor(12/cols)}
   if (counterX==12){counterY+=Math.floor(12/cols);counterX=0}
-  layoutArr.push({num:`${item.get('id')}`,i:`${i}`,x:counterX, y:counterY, w: Math.floor(12/cols), h: Math.floor(12/cols) })  });
+  layoutArr.push({num:`${item.id}`,i:`${i}`,x:counterX, y:counterY, w: Math.floor(12/cols), h: Math.floor(12/cols) })  });
     return layoutArr
   }
 
 
-generateLayout= ()=>{
-  const {categoryItems,currentLayout} =this.props
-  //  let cols=currentLayout.get('cols') // here fix
-  let layoutArr=[];
-  let counterX=0;
-  let counterY=0;
-  categoryItems.map((item, i)=>{
-  let lol=JSON.parse(item.get('layout_settings'))[currentLayout.get('name')]
-  layoutArr.push(lol)
- });
-    // this.props.actions.updateLayoutSettings2(layoutArr)
-    return layoutArr
-  }
+// generateLayout= ()=>{
+//   const {categoryItems,currentLayout} =this.props
+//   //  let cols=currentLayout.get('cols') // here fix
+//   let layoutArr=[];
+//   let counterX=0;
+//   let counterY=0;
+//   categoryItems.map((item, i)=>{
+//   let lol=JSON.parse(item.get('layout_settings'))[currentLayout.get('name')]
+//   layoutArr.push(lol)
+//  });
+//     return layoutArr
+//   }
 
 saveChangesToLayout=()=>(e)=>{
 this.props.actions.updateLayoutSettings();
 }
 
 onLayoutChange= (layoutName)=>(layout)=>{
-// console.log('here=========3',layoutName,layout);
+  // console.log(layout);
 let itemsArr=[];
 let itemsJSON=[];
 let items=this.props.itemsSettings;
 if (items.size){
 items.map((it,n)=>{
-// console.log('check',it.layout_settings[layoutName.get('name')].i);
   let ls={...it.layout_settings}
 ls[layoutName]=layout.find(each=>each.i==it.layout_settings[layoutName].i);
 
  itemsArr.push({id:it.id,order_num:it.order_num,layout_settings:ls})
-itemsJSON.push({id:it.id,order_num:it.order_num,layout_settings:JSON.stringify(ls)})
+ itemsJSON.push({id:it.id,order_num:it.order_num,layout_settings:JSON.stringify(ls)})
  })
-// console.log('itemsArr',itemsArr);
-// this.props.actions.testLayout(layout)
+
 
 itemsArr.length && this.props.actions.updateLayoutSettings(itemsArr)
 itemsArr.length && this.props.actions.updateLayoutSettingsJSON(itemsJSON)
-// this.setState({layout:itemsArr})
 }
 }
 
@@ -125,21 +97,27 @@ itemsArr.length && this.props.actions.updateLayoutSettingsJSON(itemsJSON)
 saveLayouts= (data,id)=>()=>{
   this.props.actions.saveLayouts(data,id)
 }
-dataGrid= (item,layout,i)=>{
-  const {itemsSettings}=this.props
-  let itemN=itemsSettings.toJS().find(each=>each.id==item.get('id')).layout_settings[layout.get('name')]
+
+
+dataGrid= (item,layout,i,itemsSettings)=>{
+!item.layout_settings && console.log('popalsya',item.id);
+  // console.log('JSOn PARSE---',JSON.parse(item.layout_settings)[layout.name]);
+  // console.log('item.toJS()',item.toJS());
+  // const {itemsSettings}=this.props
+  // let itemN=itemsSettings.toJS().find(each=>{return each.id==item.get('id')}).layout_settings[layout.get('name')] //TYT CYKA
   let res={};
-  res=itemN
-  return res
-  // item.get('layout_settings')
-  //  ? res=JSON.parse(item.get('layout_settings'))[layout.get('name')]
-  // : res={x:0,y:0,w:12,h:1,generated:true}
-// res={x:0,y:0,w:12,h:1,generated:true}
+  // res=itemN
+  // return res
+ // res=JSON.parse(item.layout_settings)[layout.name]
+ res=JSON.parse(item.layout_settings)[layout.name]
+
+return res;
 }
 
 renderLayoutLg= ()=>{
     const {categoryItems,currentLayout,itemsSettings}=this.props
     console.log(currentLayout.get('name'));
+    console.log('categoryItems',categoryItems);
   return(
     <ReactGridLayout
       // className='layout'
@@ -210,19 +188,18 @@ children=()=>{
   console.log('itemsSettings',itemsSettings);
   return (
   categoryItems.map((item,i)=>{
-    let size=item.get('image_size_type');
+    let size=item.image_size_type;
     return(
       <div
         className='card'
-        // key={JSON.parse(item.get('layout_settings')).lg.i}
         key={i}
-        data-grid={this.dataGrid(item,currentLayout,i) }
+        data-grid={this.dataGrid(item,currentLayout.toJS(),i,itemsSettings) }
         style={{background:`${size==1 ? 'purple' : size==2 ? 'skyblue': size==3 ? 'orange': 'red'}` }}
       >
-        {this.dataGrid(item,currentLayout,i).generated ? <p>AUTOGENERATED{JSON.stringify(this.dataGrid(item,currentLayout,i))}</p>: <p>ITS OK</p>}
+        {/* {this.dataGrid(item.toJS(),currentLayout.toJS(),i,itemsSettings).generated ? <p>AUTOGENERATED</p>: <p>ITS OK</p>} */}
         <p>id of mapping {i}</p>
-        <p>item id =>{item.get('id')}</p>
-        <img  className='card__img' src={`/uploads/${item.get('image')}`}  alt={item.get('image')} />
+        <p>item id =>{item.id}</p>
+        {/* <img  className='card__img' src={`/uploads/${item.get('image')}`}  alt={item.get('image')} /> */}
         <div className='card__hover'>
           <div className='card__hover-bottom'>
             <div className='card__hover-center'>
@@ -256,7 +233,8 @@ choseCategory= (category)=>()=>{
       currentCategory
     }=this.props
   //  const {currentCategory} =this.state
-    console.log('categoriesList',categoriesList);
+
+
     return(
       <div className='admin-grid-wrapper'>
         <div className='admin-grid'>
@@ -300,7 +278,7 @@ choseCategory= (category)=>()=>{
 
 
         </div>
-        {itemsSettings.size > 0 && <div style={{width:`${currentLayout.get('breakpoint')}px`,margin:'0 auto'}}>
+        { <div style={{width:`${currentLayout.get('breakpoint')}px`,margin:'0 auto'}}>
           {currentLayout.get('name')=='lg' && this.renderLayoutLg()}
           {currentLayout.get('name')=='md' && this.renderLayoutMd()}
           {currentLayout.get('name')=='sm' && this.renderLayoutSm()}

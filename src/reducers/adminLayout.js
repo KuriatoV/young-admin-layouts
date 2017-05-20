@@ -13,6 +13,9 @@ const initialState=fromJS({
 export default (state = initialState, action)=>{
     switch (action.type){
 
+        case 'reset':{
+        return state
+        }
         case 'LOAD_CATEGORIES_LIST_SUCCESS':{
         return state.set('categoriesList',fromJS(action.payload))
         }
@@ -20,7 +23,7 @@ export default (state = initialState, action)=>{
         return state.set('newItemsSettings',action.settings)
         }
         case 'CHANGE_CATEGORY_SUCCESS':{
-        return state.set('currentCategory',action.payload).set('categoryItems',fromJS(action.categoryItems))
+        return state.set('currentCategory',action.payload).set('categoryItems',action.categoryItems)
         }
         case 'SET_CURRENT_LAYOUT':{
         return state.set('currentLayout',Map(action.payload))
@@ -31,16 +34,15 @@ export default (state = initialState, action)=>{
         case 'UPDATE_LAYOUT_SETTINGS_JSON':{
          return state.set('newItemsSettings',action.newItems)
         }
+        case 'SAVE_LAYOUTS_SUCCESS':{
+         return state.set('categoryItems',action.payload)
+        }
         case 'CALCULATE_CURRENT_LAYOUT':{
           let settings_arr=fromJS(action.payload).map((item,i)=>{
-          let layout_settings=JSON.parse(item.get('layout_settings')
-             || JSON.stringify({
-               lg:{i:`${i}`,x:0,y:0,w:4,h:1,generated:true},
-               md:{i:`${i}`,x:0,y:0,w:4,h:1,generated:true},
-               sm:{i:`${i}`,x:0,y:0,w:4,h:1,generated:true},
-               xs:{i:`${i}`,x:0,y:0,w:4,h:1,generated:true}
-             }));
-            //  console.log(layout_settings);
+            item=fromJS(item)
+          let layout_settings=JSON.parse(item.get('layout_settings'));
+
+             console.log(item.get('id'),layout_settings);
              return{id:item.get('id'),layout_settings:layout_settings,order_num:item.get('order_num')}
            })
           return state.set('itemsSettings',settings_arr)

@@ -62,10 +62,10 @@ export const setNewSettings = (settings)=>async (dispatch)=> {
                  method: 'POST'
              })
              //
-             await fetchToState(`/discounts/category/${id}/?&pagination-off=1`, {key: 'discountsAdmin'});
+            //  await fetcher(`/discounts/category/${id}/?&pagination-off=1`);
              dispatch({
                  type: 'SAVE_LAYOUTS_SUCCESS',
-
+                 payload: response
              })
           }
          catch (e){
@@ -77,9 +77,10 @@ export const setNewSettings = (settings)=>async (dispatch)=> {
          }
      }
      export const changeActiveCategory = (id) => async (dispatch) => {
-         try{
+try{
            const response = await fetcher(`/discounts/category/${id}/?&pagination-off=1`)
-           dispatch({
+
+           await dispatch({
              type: 'CHANGE_CATEGORY_SUCCESS',
              payload: id,
              categoryItems:response
@@ -88,7 +89,8 @@ export const setNewSettings = (settings)=>async (dispatch)=> {
              type: 'CALCULATE_CURRENT_LAYOUT',
              payload: response
            })
-          }
+         }
+
          catch (e){
            console.log(e);
              dispatch({
