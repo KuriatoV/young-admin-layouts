@@ -77,7 +77,7 @@ export const setNewSettings = (settings)=>async (dispatch)=> {
          }
      }
      export const changeActiveCategory = (id) => async (dispatch) => {
-try{
+        try{
            const response = await fetcher(`/discounts/category/${id}/?&pagination-off=1`)
 
            await dispatch({
@@ -86,9 +86,13 @@ try{
              categoryItems:response
            })
            await dispatch({
-             type: 'CALCULATE_CURRENT_LAYOUT',
+             type: 'GET_CURRENT_LAYOUT',
              payload: response
            })
+          //  await dispatch({
+          //    type: 'CALCULATE_CURRENT_LAYOUT',
+          //    payload: response
+          //  })
          }
 
          catch (e){

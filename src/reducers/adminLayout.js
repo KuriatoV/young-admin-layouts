@@ -7,7 +7,7 @@ const initialState=fromJS({
   categoryItems:[],
   itemsSettings:[],
   newItemsSettings:[],
-
+  layout:{lg:[],md:[],sm:[],xs:[] }
 });
 
 export default (state = initialState, action)=>{
@@ -36,6 +36,19 @@ export default (state = initialState, action)=>{
         }
         case 'SAVE_LAYOUTS_SUCCESS':{
          return state.set('categoryItems',action.payload)
+        }
+        case 'GET_CURRENT_LAYOUT':{
+
+          let layout={lg:[],md:[],sm:[],xs:[] };
+          action.payload.map((item,i)=>{
+          Object.keys(layout).map(each=>{
+            layout[each].push(JSON.parse(item.layout_settings)[each])
+          })
+            // layout.lg.push{JSON.parse(item.layout_settings).lg}
+          })
+          
+
+         return state.set('layout',layout)
         }
         case 'CALCULATE_CURRENT_LAYOUT':{
           let settings_arr=fromJS(action.payload).map((item,i)=>{
