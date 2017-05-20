@@ -6,10 +6,10 @@ import {Responsive,WidthProvider } from 'react-grid-layout'
 import ReactGridLayout  from 'react-grid-layout';
 import adminGrid from './adminGrid.sass'
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
+import {isImmutable} from 'immutable'
 
 @connect(state => ({
 categoriesList:state.getIn(['adminLayout','categoriesList']),
-// categoryItems:state.getIn(['fetchData','discountsAdmin','response']),
 categoryItems:state.getIn(['adminLayout','categoryItems']),
 itemsSettings:state.getIn(['adminLayout','itemsSettings']),
 newItemsSettings:state.getIn(['adminLayout','newItemsSettings']),
@@ -38,7 +38,7 @@ componentWillMount=()=>{
  // this.props.actions.calculateCurrentLayout(this.props.categoryItems);
 }
 componentWillReceiveProps=(next)=>{
-next.currentCategory!=this.props.currentCategory && this.props.actions.calculateCurrentLayout(next.categoryItems);
+// next.currentCategory!=this.props.currentCategory && this.props.actions.calculateCurrentLayout(next.categoryItems);
   // this.props.actions.calculateCurrentLayout(this.props.categoryItems);
 
   console.log('componentWillReceiveProps');
@@ -99,7 +99,7 @@ this.props.actions.updateLayoutSettings();
 }
 
 onLayoutChange= (layoutName)=>(layout)=>{
-console.log('here=========Ю',layoutName,layout);
+// console.log('here=========3',layoutName,layout);
 let itemsArr=[];
 let itemsJSON=[];
 let items=this.props.itemsSettings;
@@ -126,17 +126,19 @@ saveLayouts= (data,id)=>()=>{
   this.props.actions.saveLayouts(data,id)
 }
 dataGrid= (item,layout,i)=>{
+  const {itemsSettings}=this.props
+  let itemN=itemsSettings.toJS().find(each=>each.id==item.get('id')).layout_settings[layout.get('name')]
   let res={};
-  item.get('layout_settings')
-  // res=JSON.parse(item.get('layout_settings'))[layout.get('name')]
-   ? res=JSON.parse(item.get('layout_settings'))[layout.get('name')]
-  : res={x:0,y:0,w:4,h:1,generated:true}
-  // console.log('res',res);
+  res=itemN
   return res
+  // item.get('layout_settings')
+  //  ? res=JSON.parse(item.get('layout_settings'))[layout.get('name')]
+  // : res={x:0,y:0,w:12,h:1,generated:true}
+// res={x:0,y:0,w:12,h:1,generated:true}
 }
 
 renderLayoutLg= ()=>{
-    const {categoryItems,currentLayout}=this.props
+    const {categoryItems,currentLayout,itemsSettings}=this.props
     console.log(currentLayout.get('name'));
   return(
     <ReactGridLayout
@@ -204,9 +206,10 @@ renderLayoutXs= ()=>{
   )
 }
 children=()=>{
-  const {categoryItems,currentLanguage,discountFilter,currentLayout}=this.props
+  const {itemsSettings,categoryItems,currentLanguage,discountFilter,currentLayout}=this.props
+  console.log('itemsSettings',itemsSettings);
   return (
- categoryItems.map((item,i)=>{
+  categoryItems.map((item,i)=>{
     let size=item.get('image_size_type');
     return(
       <div
@@ -297,12 +300,13 @@ choseCategory= (category)=>()=>{
 
 
         </div>
-        <div style={{width:`${currentLayout.get('breakpoint')}px`,margin:'0 auto'}}>
+        {itemsSettings.size > 0 && <div style={{width:`${currentLayout.get('breakpoint')}px`,margin:'0 auto'}}>
           {currentLayout.get('name')=='lg' && this.renderLayoutLg()}
           {currentLayout.get('name')=='md' && this.renderLayoutMd()}
           {currentLayout.get('name')=='sm' && this.renderLayoutSm()}
           {currentLayout.get('name')=='xs' && this.renderLayoutXs()}
         </div>
+        }
       </div>
 
     )

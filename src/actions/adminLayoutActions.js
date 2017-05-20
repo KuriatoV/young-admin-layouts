@@ -23,6 +23,11 @@ export const updateLayoutSettings = (newItems)=>async (dispatch)=> {
                type: 'UPDATE_LAYOUT_SETTINGS',
                newItems
            })
+    // await dispatch({
+    //            type: 'CALCULATE_CURRENT_LAYOUT',
+    //            payload: newItems
+    //        })
+
      }
 export const updateLayoutSettingsJSON = (newItems)=>async (dispatch)=> {
     await dispatch({
@@ -30,12 +35,12 @@ export const updateLayoutSettingsJSON = (newItems)=>async (dispatch)=> {
                newItems
            })
      }
-export const calculateCurrentLayout = (categoryItems)=>async (dispatch)=> {
-    await dispatch({
-               type: 'CALCULATE_CURRENT_LAYOUT',
-               payload: categoryItems
-           })
-     }
+// export const calculateCurrentLayout = (categoryItems)=>async (dispatch)=> {
+//     await dispatch({
+//                type: 'CALCULATE_CURRENT_LAYOUT',
+//                payload: categoryItems
+//            })
+//      }
 export const setCurrentLayout = (name,cols,breakpoint)=>async (dispatch)=> {
     await dispatch({
                type: 'SET_CURRENT_LAYOUT',
@@ -72,17 +77,20 @@ export const setNewSettings = (settings)=>async (dispatch)=> {
          }
      }
      export const changeActiveCategory = (id) => async (dispatch) => {
-       console.log('changeActiveCategory works',id);
-       const URL=`/discounts/category/${id}/?&pagination-off=1`;
          try{
-           const response = await fetcher(URL)
+           const response = await fetcher(`/discounts/category/${id}/?&pagination-off=1`)
            dispatch({
              type: 'CHANGE_CATEGORY_SUCCESS',
              payload: id,
              categoryItems:response
            })
+           await dispatch({
+             type: 'CALCULATE_CURRENT_LAYOUT',
+             payload: response
+           })
           }
          catch (e){
+           console.log(e);
              dispatch({
                  type: 'CHANGE_CATEGORY_ERROR',
                  payload: e
