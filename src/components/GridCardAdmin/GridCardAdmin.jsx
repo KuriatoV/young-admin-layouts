@@ -31,21 +31,34 @@ export default class GridAdminComponent extends React.Component {
     this.props.actions.loadCategoriesList();
   }
 
-generateLayoutsSettings= (items)=>()=>{
- let itemsArr=[];
- items.map(it=>{
-  let layout_settings={
-    lg:this.layoutFromCols(6,items).find(f=>f.num==it.id),
-    md:this.layoutFromCols(3,items).find(f=>f.num==it.id),
-    sm:this.layoutFromCols(2,items).find(f=>f.num==it.id),
-    xs:this.layoutFromCols(1,items).find(f=>f.num==it.id)
-  }
-  itemsArr.push({id:it.id,order_num:it.order_num,layout_settings:JSON.stringify(layout_settings)})
-})
-  this.props.actions.setNewSettings(itemsArr);
- }
+// generateLayoutsSettings= (items)=>()=>{
+//  let itemsArr=[];
+//  items.map(it=>{
+//   let layout_settings={
+//     lg:this.layoutFromCols(6,items).find(f=>f.num==it.id),
+//     md:this.layoutFromCols(3,items).find(f=>f.num==it.id),
+//     sm:this.layoutFromCols(2,items).find(f=>f.num==it.id),
+//     xs:this.layoutFromCols(1,items).find(f=>f.num==it.id)
+//   }
+//   itemsArr.push({id:it.id,order_num:it.order_num,layout_settings:JSON.stringify(layout_settings)})
+// })
+//   this.props.actions.setNewSettings(itemsArr);
+//  }
+//
 
-layoutFromCols= (cols,items)=>{
+generateLayoutsSettings= (items)=>()=>{
+const {layout} =this.props
+let layout_settings={};
+Object.keys(layout).map(each=>
+  layout_settings[each]=this.generateByLayout(each,items)
+)
+console.log('layout_settings==>',layout_settings);
+this.props.actions.generateDefault(layout_settings)
+  // return layout_settings
+}
+generateByLayout= (layoutName,items)=>{
+  let layoutGrid={lg:6,md:3,sm:2,xs:1};
+  let cols=layoutGrid[layoutName];
   let layoutArr=[];
   let counterX=0;
   let counterY=0;
@@ -55,6 +68,8 @@ layoutFromCols= (cols,items)=>{
   layoutArr.push({num:`${item.id}`,i:`${i}`,x:counterX, y:counterY, w: Math.floor(12/cols), h: Math.floor(12/cols) })  });
     return layoutArr
   }
+
+
 
 
 // generateLayout= ()=>{
@@ -69,22 +84,15 @@ layoutFromCols= (cols,items)=>{
 //  });
 //     return layoutArr
 //   }
-
 saveChangesToLayout=()=>(e)=>{
 this.props.actions.updateLayoutSettings();
 }
-
 onLayoutChange= ()=>(layout)=>{
   let layoutName=this.props.currentLayout.get('name');
   this.props.layout[layoutName] && this.props.actions.updateLayout(layout,layoutName)
-
 }
-
-
 saveLayouts= ()=>()=>{
   const {currentCategory,layout,categoryItems}=this.props
-
-
   let itemsJSON=[];
   let items=categoryItems;
   if (items.length){
@@ -97,7 +105,6 @@ saveLayouts= ()=>()=>{
   }
   this.props.actions.saveLayouts(itemsJSON,currentCategory)
 }
-
 setLayout= (colsCount,l_name,breakpoint)=>(e)=>{
   this.props.actions.setCurrentLayout(l_name,colsCount,breakpoint);
 }
@@ -158,15 +165,17 @@ choseCategory= (category)=>()=>{
           {/* <div>Current layout ,{currentLayout.get('name') }  cols={currentLayout.get('cols')}</div>
           <div>Current breakpoint {currentLayout.get('breakpoint')}</div> */}
           {/* <button onClick={this.saveChangesToLayout(currentLayout.get('name'))}>save layout for {currentLayout.get('breakpoint')}///{currentLayout.get('name')}</button> */}
-          {/* <button onClick={this.generateLayoutsSettings(categoryItems)}>GENERATE DEFAULT LAYOUT SETTINGS </button> */}
+
         </div>
         <div className='admin-grid__save-button--wrapper'>
           {  categoriesList && categoriesList.find(category=>category.get('id')==currentCategory) &&
             <button onClick={this.saveLayouts()} className='admin-grid__save-button' >
-              SAVE LAYOUTS FOR  <span className='admin-grid__save-button--text'>{categoriesList.find(category=>category.get('id')==currentCategory).get('title').toUpperCase()}</span>
+              <i className='fa fa-floppy-o fa-lg black'></i>  SAVE LAYOUTS FOR  <span className='admin-grid__save-button--text'>{categoriesList.find(category=>category.get('id')==currentCategory).get('title').toUpperCase()}</span>
             </button>
           }
-
+        </div>
+        <div className='admin-grid__default-button pull-right' onClick={this.generateLayoutsSettings(categoryItems)}>
+          GENERATE DEFAULT LAYOUT
         </div>
         { <div style={{width:`${currentLayout.get('breakpoint')}px`,margin:'0 auto'}}>
           <ReactGridLayout

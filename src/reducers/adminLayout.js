@@ -18,6 +18,9 @@ const initialState=fromJS({
 export default (state = initialState, action)=>{
     switch (action.type){
 
+        case 'APPLY_DEFAULT_LAYOUT':{
+        return state.set('layout',action.layout)
+        }
         case 'LOAD_CATEGORIES_LIST_SUCCESS':{
         return state.set('categoriesList',fromJS(action.payload))
         }

@@ -23,6 +23,12 @@ export const updateLayout = (layout,layoutName)=>async (dispatch)=> {
                layoutName
            })
      }
+export const generateDefault = (layout)=>async (dispatch)=> {
+    await dispatch({
+               type: 'APPLY_DEFAULT_LAYOUT',
+               layout
+           })
+     }
 
 export const setCurrentLayout = (name,cols,breakpoint)=>async (dispatch)=> {
     await dispatch({
