@@ -13,9 +13,7 @@ export const loadCategoriesList=() =>async (dispatch)=> {
           type: 'LOAD_CATEGORIES_LIST_ERROR',
           payload: e
       })
-
   }
-
 }
 
 export const updateLayout = (layout,layoutName)=>async (dispatch)=> {
@@ -26,25 +24,6 @@ export const updateLayout = (layout,layoutName)=>async (dispatch)=> {
            })
      }
 
-
-export const updateLayoutSettings = (newItems)=>async (dispatch)=> {
-    await dispatch({
-               type: 'UPDATE_LAYOUT_SETTINGS',
-               newItems
-           })
-     }
-export const updateLayoutSettingsJSON = (newItems)=>async (dispatch)=> {
-    await dispatch({
-               type: 'UPDATE_LAYOUT_SETTINGS_JSON',
-               newItems
-           })
-     }
-// export const calculateCurrentLayout = (categoryItems)=>async (dispatch)=> {
-//     await dispatch({
-//                type: 'CALCULATE_CURRENT_LAYOUT',
-//                payload: categoryItems
-//            })
-//      }
 export const setCurrentLayout = (name,cols,breakpoint)=>async (dispatch)=> {
     await dispatch({
                type: 'SET_CURRENT_LAYOUT',
@@ -65,11 +44,9 @@ export const setNewSettings = (settings)=>async (dispatch)=> {
                  },
                  method: 'POST'
              })
-             //
-            //  await fetcher(`/discounts/category/${id}/?&pagination-off=1`);
+
              dispatch({
-                 type: 'SAVE_LAYOUTS_SUCCESS',
-                 payload: response
+               type: 'SAVE_LAYOUTS_SUCCESS',
              })
           }
          catch (e){
@@ -93,18 +70,13 @@ export const setNewSettings = (settings)=>async (dispatch)=> {
              type: 'GET_CURRENT_LAYOUT',
              payload: response
            })
-          //  await dispatch({
-          //    type: 'CALCULATE_CURRENT_LAYOUT',
-          //    payload: response
-          //  })
-         }
 
+         }
          catch (e){
            console.log(e);
              dispatch({
                  type: 'CHANGE_CATEGORY_ERROR',
                  payload: e
              })
-
          }
      }
