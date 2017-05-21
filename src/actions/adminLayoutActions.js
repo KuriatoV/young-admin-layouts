@@ -18,16 +18,20 @@ export const loadCategoriesList=() =>async (dispatch)=> {
 
 }
 
+export const updateLayout = (layout,layoutName)=>async (dispatch)=> {
+    await dispatch({
+               type: 'UPDATE_LAYOUT',
+               layout,
+               layoutName
+           })
+     }
+
+
 export const updateLayoutSettings = (newItems)=>async (dispatch)=> {
     await dispatch({
                type: 'UPDATE_LAYOUT_SETTINGS',
                newItems
            })
-    // await dispatch({
-    //            type: 'CALCULATE_CURRENT_LAYOUT',
-    //            payload: newItems
-    //        })
-
      }
 export const updateLayoutSettingsJSON = (newItems)=>async (dispatch)=> {
     await dispatch({
